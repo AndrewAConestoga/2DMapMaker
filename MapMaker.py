@@ -4,10 +4,8 @@ import customtkinter as ctk
 from PIL import Image
 import os 
 import Tiles as Tile
-import ctkxy_frame as ctkxy
 import Map as map
 from threading import Thread
-import pygame as Pygame
 import mouse as mouse
 import Constants as Constants
 
@@ -22,6 +20,9 @@ def ClearScreen():
     Create_Frame.forget()
     Title_Frame.forget()
     Edit_Frame.forget()
+
+    ## Reset Labels 
+    Dimension_Error_Message.configure(text="")
 
 ## Sets the screen to the map screen
 def MapScreen():
@@ -52,20 +53,49 @@ def CreateNewMap(x,y):
 
     global Map
     Map = map.Map(frame=Map_Frame, x=x, y=y, width=MapEditScreen_Width, height=MapEditScreen_Height, button_height=int(MapEditScreen_Height/y)-Constants.BUTTON_BORDER_WIDTH, button_width=int(MapEditScreen_Width/x)-Constants.BUTTON_BORDER_WIDTH, img=blankImage, tiles=Tiles)
-    Map.Map.grid(pady=20,padx=50,  row=0, column=1, rowspan=2)
+    Map.Map.grid(pady=40,padx=50,  row=0, column=1, rowspan=2)
 
 ## creates a new map and then sets the screen to the map screen with the new map loaded, map size is based on user input in the textboxes
 def NewMapScreen():
 
+    ValidDimensions = GetIntDimensions()
+    if (ValidDimensions[0]==Constants.INVALID or ValidDimensions[1]==Constants.INVALID):
+
+          Dimension_Error_Message.configure(text="Incorrect dimensions inputted")
+          return
+
+
     CreateNewMap(x=int(Dimension_X_TextBox.get(0.0, "end")), y=int(Dimension_Y_TextBox.get(0.0, "end")))
 
-    ClearScreen()
-    Map_Frame.pack()
+    MapScreen()
 
+## Saves the current map as a PNG file in the working directory
 def ExportMapToPNG():
 
     global Map
     Map.ExportMap()
+
+
+## Gets the dimensions from the GUI elements, Values return -1 or INVALID if they are not valid, returns array of [x_value, y_value]
+def GetIntDimensions():
+
+    try:
+        ## If inputted values cannot be converted to integers 
+        dimension_x = int(Dimension_X_TextBox.get(0.0, "end"))
+        dimension_y = int(Dimension_Y_TextBox.get(0.0, "end"))
+    except:
+        return [Constants.INVALID,Constants.INVALID]
+    
+    if (dimension_x < Constants.MIN_MAP_SIDE_DIMENSION or dimension_x > Constants.MAX_MAP_SIDE_DIMENSION):
+
+        dimension_x = Constants.INVALID
+
+    if (dimension_y < Constants.MIN_MAP_SIDE_DIMENSION or dimension_y > Constants.MAX_MAP_SIDE_DIMENSION):
+
+        dimension_y = Constants.INVALID
+
+    return [dimension_x,dimension_y]
+
 
 
 ## Appearence/Theme of the window and GUI
@@ -78,7 +108,7 @@ window = ctk.CTk()
 
 
 ### Constants of the devices resolution
-HEIGHT=1000
+HEIGHT=900
 if window.winfo_screenheight() < HEIGHT:
 
     ## makes sure window height is not higher then the devices height
@@ -87,7 +117,7 @@ if window.winfo_screenheight() < HEIGHT:
 WIDTH = 1600
 if window.winfo_screenwidth() < WIDTH:
 
-    ## makes sure window width is not higher then the devices width
+    ## makes sure window width is not wider then the devices width
     WIDTH = window.winfo_screenwidth()
 
 ### Create the frames that will be used for the different screen layouts 
@@ -109,9 +139,11 @@ Dimension_Button_Width = int(WIDTH/20)
 Create_Map_Button = ctk.CTkButton(master=Create_Frame, width=Create_New_Map_Width, text="Create Map", height=Create_New_Map_Height, command=NewMapScreen)
 Dimension_X_TextBox = ctk.CTkTextbox(master=Create_Frame, width=Dimension_Button_Width, height=Dimension_Button_Height, font=('<Aerial>', 20), bg_color="white")
 Dimension_Y_TextBox = ctk.CTkTextbox(master=Create_Frame, width=Dimension_Button_Width, height=Dimension_Button_Height, font=('<Aerial>', 20), bg_color="white")
+Dimension_Error_Message = ctk.CTkLabel(master=Create_Frame, width=Create_New_Map_Width, text="", height=Create_New_Map_Height, font=('<Aerial>', 30))
 Create_Map_Button.grid(padx=1, row=0, column=0, columnspan=2)
 Dimension_X_TextBox.grid(padx=1, pady=80, row=1, column=0)
 Dimension_Y_TextBox.grid(padx=1, pady=80, row=1, column=1)
+Dimension_Error_Message.grid(padx=1, pady=100, row=2, column=0, columnspan=2)
 
 
 
@@ -135,8 +167,8 @@ TileSelection_Rows = Constants.TILE_COLUMNS
 TileSelection = ctk.CTkScrollableFrame(Map_Frame,label_text="Tiles", height=TileSelection_Height, width=TileSelection_Width)
 
 ### Scrollable Frame for Drawing the map
-MapEditScreen_Width = int(TileSelection_Width*2.3)
-MapEditScreen_Height = int(TileSelection_Width*2.3)
+MapEditScreen_Width = int(TileSelection_Width*2)
+MapEditScreen_Height = int(TileSelection_Width*2)
 
 ### For Save and Export Frame to display the buttons next to eachother 
 Save_Export_Height = MapEditScreen_Height - TileSelection_Height
@@ -166,8 +198,4 @@ Title_Frame.pack()
 
 ### Mainloop must be after packing buttons/labels or else they will not show up 
 window.mainloop()
-
-
-
-
 

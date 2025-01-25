@@ -3,9 +3,9 @@ import tkinter as tk
 import mouse as mouse 
 from PIL import Image
 import Tiles as Tile
-import ctkxy_frame as ctkxy
 import Constants as Constants
 import numpy as np
+import getpass
 
 class Map:
 
@@ -14,8 +14,10 @@ class Map:
         self.MousePressed = False
         self.Map = ctk.CTkFrame(frame, height=height, width=width)
         self.tiles = tiles
-        self.button_width = button_width
-        self.button_height = button_height
+
+        self.dimension = button_width
+        if button_height < self.dimension:
+            self.dimension = button_height
 
         self.Buttons = [[0 for _ in range(int(y))] for _ in range(int(x))]
         self.ImgIndexAtButton = [[0 for _ in range(int(y))] for _ in range(int(x))]
@@ -24,11 +26,11 @@ class Map:
         ## Make 40 the highest dimension a map can be due to lag reasons because customtkinter sucks 
         for i in range(x):
             for j in range(y):
-                Button = ctk.CTkButton(master=self.Map, text="", image=img, fg_color="transparent", corner_radius=0, width=button_width, height=button_height, command=lambda X=i, Y=j: self.SetImageScaled(self.button_width,self.button_height,X,Y))
+                Button = ctk.CTkButton(master=self.Map, text="", image=img, fg_color="transparent", corner_radius=0, width=self.dimension, height=self.dimension, command=lambda X=i, Y=j: self.SetImageScaled(self.dimension,self.dimension,X,Y))
                 Button.bind('<Button-1>',self.MousePress)
                 Button.bind('<ButtonRelease-1>',self.MouseReleased)
                 Button.bind('<Enter>', command=lambda event, X=i, Y=j: self.AutoFill(event,X,Y))
-                Button.configure(image=self.tiles.GetScaledDownImageAtIndex(Constants.BLANK_IMAGE,button_width,button_height))
+                Button.configure(image=self.tiles.GetScaledDownImageAtIndex(Constants.BLANK_IMAGE,self.dimension,self.dimension))
                 Button.grid(row=i, column=j, padx=0, pady=0)
                 self.Buttons[i][j] = Button
                 self.ImgIndexAtButton[i][j] = Constants.BLANK_IMAGE
@@ -50,7 +52,7 @@ class Map:
 
         ## If the user is holding down left click and they enter a new tile, then fill it with the selected tile
         if self.MousePressed:
-            self.SetImageScaled(self.button_width,self.button_height,x,y)
+            self.SetImageScaled(self.dimension,self.dimension,x,y)
 
 
     def MousePress(self, event):
@@ -75,11 +77,11 @@ class Map:
 
         img:Image = self.tiles.GetPillowImageAtIndex(self.ImgIndexAtButton[0][0], Constants.TILE_SIZE_IN_PNG_IN_PX, Constants.TILE_SIZE_IN_PNG_IN_PX)
         ## ArrayOfPixels = [[0 for _ in range(int(Constants.TILE_SIZE_IN_PNG_IN_PX)*len(self.Buttons))] for _ in range(int(Constants.TILE_SIZE_IN_PNG_IN_PX)*len(self.Buttons[0]))]
-        ArrayOfPixels = np.zeros(shape=(int(Constants.TILE_SIZE_IN_PNG_IN_PX)*len(self.Buttons[0]), int(Constants.TILE_SIZE_IN_PNG_IN_PX)*len(self.Buttons), 4), dtype=np.uint8)
+        ArrayOfPixels = np.zeros(shape=(int(Constants.TILE_SIZE_IN_PNG_IN_PX)*len(self.Buttons), int(Constants.TILE_SIZE_IN_PNG_IN_PX)*len(self.Buttons[0]), 4), dtype=np.uint8)
 
 
-        for mx in range (len(self.Buttons)):
-            for my in range(len(self.Buttons[0])):
+        for my in range (len(self.Buttons)):
+            for mx in range(len(self.Buttons[0])):
 
                 # Load image 
                 img:Image = self.tiles.GetPillowImageAtIndex(self.ImgIndexAtButton[my][mx], Constants.TILE_SIZE_IN_PNG_IN_PX, Constants.TILE_SIZE_IN_PNG_IN_PX).convert("RGBA")
@@ -91,17 +93,11 @@ class Map:
                         ArrayOfPixels[py+(my*Constants.TILE_SIZE_IN_PNG_IN_PX),px+(mx*Constants.TILE_SIZE_IN_PNG_IN_PX)] = pixel
 
         newImg = Image.fromarray(ArrayOfPixels, "RGBA")
-        newImg.save("TestMap.png")
+        newImg.save("/Users/"+getpass.getuser()+"/Downloads/Map.png")
 
 
 
 
             
         ## img = Image.new(size=(len(self.Buttons), len(self.Buttons[0])), mode="RGB")
-        
-
-
-
-
-
-## WindowManager, AlertManager, FileManager, DeviceManager, Device, Alarm, Blinds, Camera, CoffeeMachine, Sensor, Shower, SmokeDetector, Thermostat.
+    
