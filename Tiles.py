@@ -1,11 +1,11 @@
 import tkinter as tk
 import time as Time
-import ButtonFunctions as BF
+import UtilFunctions as BF
 import customtkinter as ctk 
 from PIL import Image
 import os 
 from threading import Thread
-import Constants as Constants
+import Constants as C
 
 def ErrorWindow():
 
@@ -24,7 +24,7 @@ class Tiles:
 
         self.imageList = os.listdir(file_path)
         self.images = []
-        self.selected = Constants.BLANK_IMAGE
+        self.selected = C.BLANK_IMAGE
         self.path = file_path
 
         for i in range(len(self.imageList)):
@@ -33,8 +33,12 @@ class Tiles:
                
                 self.images.append(ctk.CTkImage(light_image=Image.open(file_path+self.imageList[i]), dark_image=Image.open(file_path+self.imageList[i]), size=sizeOfImages))
 
+            else:
+
+                self.imageList.remove(i)
+
         ## 
-        SIZE_OF_TILES_TUPLE = (int(widthOfFrame/amountOfRows)-amountOfRows-Constants.BUTTON_BORDER_WIDTH,int(widthOfFrame/amountOfRows)-amountOfRows-Constants.BUTTON_BORDER_WIDTH)
+        SIZE_OF_TILES_TUPLE = (int(widthOfFrame/amountOfRows)-amountOfRows-C.BUTTON_BORDER_WIDTH,int(widthOfFrame/amountOfRows)-amountOfRows-C.BUTTON_BORDER_WIDTH)
         DIMENSION_OF_TILE_BUTTON = int(widthOfFrame/amountOfRows)-amountOfRows
 
         ## Add buttons to the scrollable frame
@@ -59,10 +63,40 @@ class Tiles:
 
             return False
         
+    def GetImageByName(self, name):
+
+        for i in range(len(self.imageList)):
+
+            if self.imageList[i]==name:
+
+                return self.images[i]
+            
+        return ctk.CTkImage(light_image=Image.open(self.path+"White.jpg"), dark_image=Image.open(self.path+"White.jpg"), size=C.TILE_SIZE_IN_PNG_IN_PX)
+    
+    def GetImageIndexByName(self, name):
+
+        for i in range(len(self.imageList)):
+
+            if self.imageList[i]==name:
+
+                return i
+            
+        return C.BLANK_IMAGE
+    
+    def GetScaledDownImageByName(self, name, widthOfScale, heightOfScale):
+
+        for i in range(len(self.imageList)):
+
+            if self.imageList[i]==name:
+
+                return ctk.CTkImage(light_image=Image.open(self.path+name), dark_image=Image.open(self.path+name), size=(widthOfScale,heightOfScale))
+            
+        return ctk.CTkImage(light_image=Image.open(self.path+"White.jpg"), dark_image=Image.open(self.path+"White.jpg"), size=(widthOfScale,heightOfScale))
+        
     def GetScaledDownImageAtIndex(self, index, widthOfScale, heightOfScale):
 
         
-        if index==Constants.BLANK_IMAGE:
+        if index==C.BLANK_IMAGE:
 
             return ctk.CTkImage(light_image=Image.open(self.path+"White.jpg"), dark_image=Image.open(self.path+"White.jpg"), size=(widthOfScale,heightOfScale))
 
@@ -77,13 +111,13 @@ class Tiles:
     ## gets the Pillow image obj at index, used for taking images and reading pixel data from the image 
     def GetPillowImageAtIndex(self, index, width, height):
 
-        if index==Constants.BLANK_IMAGE:
+        if index==C.BLANK_IMAGE:
 
-            return Image.open(self.path+"White.jpg").resize(size = (Constants.TILE_SIZE_IN_PNG_IN_PX, Constants.TILE_SIZE_IN_PNG_IN_PX))
+            return Image.open(self.path+"White.jpg").resize(size = (C.TILE_SIZE_IN_PNG_IN_PX, C.TILE_SIZE_IN_PNG_IN_PX))
 
         try:
 
-            return Image.open(self.path+self.imageList[index]).resize(size = (Constants.TILE_SIZE_IN_PNG_IN_PX, Constants.TILE_SIZE_IN_PNG_IN_PX))
+            return Image.open(self.path+self.imageList[index]).resize(size = (C.TILE_SIZE_IN_PNG_IN_PX, C.TILE_SIZE_IN_PNG_IN_PX))
         
         except:
 
@@ -92,7 +126,7 @@ class Tiles:
         
     def GetImagePathAtIndex(self, index):
         
-        if index==Constants.BLANK_IMAGE:
+        if index==C.BLANK_IMAGE:
 
             return self.path+"White.jpg"
 

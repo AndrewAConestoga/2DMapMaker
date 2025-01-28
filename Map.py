@@ -3,17 +3,20 @@ import tkinter as tk
 import mouse as mouse 
 from PIL import Image
 import Tiles as Tile
-import Constants as Constants
+import Constants as C
 import numpy as np
 import getpass
 
 class Map:
 
-    def __init__(self, frame, x, y, width, height, button_width, button_height, img, tiles:Tile):
+    def __init__(self, frame, x, y, width, height, button_width, button_height, img,  tiles:Tile, name, images):
 
         self.MousePressed = False
         self.Map = ctk.CTkFrame(frame, height=height, width=width)
-        self.tiles = tiles
+        self.tiles:Tile = tiles
+        self.name:str = name
+
+        print(images)
 
         self.dimension = button_width
         if button_height < self.dimension:
@@ -27,18 +30,27 @@ class Map:
         for i in range(x):
             for j in range(y):
                 Button = ctk.CTkButton(master=self.Map, text="", image=img, fg_color="transparent", corner_radius=0, width=self.dimension, height=self.dimension, command=lambda X=i, Y=j: self.SetImageScaled(self.dimension,self.dimension,X,Y))
-                Button.bind('<Button-1>',self.MousePress)
+                Button.bind('<Button-1>',lambda event, X=i, Y=j: self.MousePress(event, X, Y))
                 Button.bind('<ButtonRelease-1>',self.MouseReleased)
                 Button.bind('<Enter>', command=lambda event, X=i, Y=j: self.AutoFill(event,X,Y))
-                Button.configure(image=self.tiles.GetScaledDownImageAtIndex(Constants.BLANK_IMAGE,self.dimension,self.dimension))
-                Button.grid(row=i, column=j, padx=0, pady=0)
+                Button.grid(row=i, column=j)
                 self.Buttons[i][j] = Button
-                self.ImgIndexAtButton[i][j] = Constants.BLANK_IMAGE
+
+                if images==None:
+                    self.ImgIndexAtButton[i][j] = C.BLANK_IMAGE
+                    Button.configure(image=self.tiles.GetScaledDownImageAtIndex(C.BLANK_IMAGE,self.dimension,self.dimension))
+                else:
+                    print("X:"+str(j)+"   Y:"+str(i))
+                    self.ImgIndexAtButton[i][j] = self.tiles.GetImageIndexByName(images[i][j])
+                    Button.configure(image=self.tiles.GetScaledDownImageByName(images[i][j],self.dimension,self.dimension))
+
+
 
 
     def SetImageScaled(self, width, height, x, y):
 
-        if (self.tiles.GetSelected()==Constants.BLANK_IMAGE):
+        if (self.tiles.GetSelected()==C.BLANK_IMAGE):
+
             return False
         
         newImage=self.tiles.GetScaledDownImageAtIndex(self.tiles.GetSelected(),width,height)
@@ -46,7 +58,7 @@ class Map:
         self.ImgIndexAtButton[x][y] = self.tiles.GetSelected()
         self.GetFirstPixelOfImage(x,y)
         self.MousePressed = True
-        mouse.click("right")
+        
 
     def AutoFill(self, event, x, y):
 
@@ -55,9 +67,10 @@ class Map:
             self.SetImageScaled(self.dimension,self.dimension,x,y)
 
 
-    def MousePress(self, event):
+    def MousePress(self, event, x, y):
 
-        pass
+        self.MousePressed = True
+        mouse.right_click()
 
     def MouseReleased(self, event):
 
@@ -68,36 +81,51 @@ class Map:
 
         self.MousePressed = False
 
+    def IsPressed(self):
+
+        return self.MousePressed
+
     ## Used for testing 
     def GetFirstPixelOfImage(self, x, y):
 
-        img = self.tiles.GetPillowImageAtIndex(self.ImgIndexAtButton[x][y], Constants.TILE_SIZE_IN_PNG_IN_PX, Constants.TILE_SIZE_IN_PNG_IN_PX)
+        img = self.tiles.GetPillowImageAtIndex(self.ImgIndexAtButton[x][y], C.TILE_SIZE_IN_PNG_IN_PX, C.TILE_SIZE_IN_PNG_IN_PX)
 
     def ExportMap(self):
 
-        img:Image = self.tiles.GetPillowImageAtIndex(self.ImgIndexAtButton[0][0], Constants.TILE_SIZE_IN_PNG_IN_PX, Constants.TILE_SIZE_IN_PNG_IN_PX)
-        ## ArrayOfPixels = [[0 for _ in range(int(Constants.TILE_SIZE_IN_PNG_IN_PX)*len(self.Buttons))] for _ in range(int(Constants.TILE_SIZE_IN_PNG_IN_PX)*len(self.Buttons[0]))]
-        ArrayOfPixels = np.zeros(shape=(int(Constants.TILE_SIZE_IN_PNG_IN_PX)*len(self.Buttons), int(Constants.TILE_SIZE_IN_PNG_IN_PX)*len(self.Buttons[0]), 4), dtype=np.uint8)
+        ## img:Image = self.tiles.GetPillowImageAtIndex(self.ImgIndexAtButton[0][0], C.TILE_SIZE_IN_PNG_IN_PX, C.TILE_SIZE_IN_PNG_IN_PX)
+        ## ArrayOfPixels = [[0 for _ in range(int(C.TILE_SIZE_IN_PNG_IN_PX)*len(self.Buttons))] for _ in range(int(C.TILE_SIZE_IN_PNG_IN_PX)*len(self.Buttons[0]))]
+        ArrayOfPixels = np.zeros(shape=(int(C.TILE_SIZE_IN_PNG_IN_PX)*len(self.Buttons), int(C.TILE_SIZE_IN_PNG_IN_PX)*len(self.Buttons[C.X]), C.RGBA), dtype=np.uint8)
 
 
         for my in range (len(self.Buttons)):
-            for mx in range(len(self.Buttons[0])):
+            for mx in range(len(self.Buttons[C.X])):
 
                 # Load image 
-                img:Image = self.tiles.GetPillowImageAtIndex(self.ImgIndexAtButton[my][mx], Constants.TILE_SIZE_IN_PNG_IN_PX, Constants.TILE_SIZE_IN_PNG_IN_PX).convert("RGBA")
+                img:Image = self.tiles.GetPillowImageAtIndex(self.ImgIndexAtButton[my][mx], C.TILE_SIZE_IN_PNG_IN_PX, C.TILE_SIZE_IN_PNG_IN_PX).convert("RGBA")
 
-                for px in range(Constants.TILE_SIZE_IN_PNG_IN_PX):
-                    for py in range(Constants.TILE_SIZE_IN_PNG_IN_PX):
+                for px in range(C.TILE_SIZE_IN_PNG_IN_PX):
+                    for py in range(C.TILE_SIZE_IN_PNG_IN_PX):
                 
                         pixel = img.getpixel((px,py))
-                        ArrayOfPixels[py+(my*Constants.TILE_SIZE_IN_PNG_IN_PX),px+(mx*Constants.TILE_SIZE_IN_PNG_IN_PX)] = pixel
+                        ArrayOfPixels[py+(my*C.TILE_SIZE_IN_PNG_IN_PX),px+(mx*C.TILE_SIZE_IN_PNG_IN_PX)] = pixel
 
         newImg = Image.fromarray(ArrayOfPixels, "RGBA")
-        newImg.save("/Users/"+getpass.getuser()+"/Downloads/Map.png")
+        newImg.save("/Users/"+getpass.getuser()+"/Downloads/"+self.name+".png")
 
-
-
-
-            
-        ## img = Image.new(size=(len(self.Buttons), len(self.Buttons[0])), mode="RGB")
     
+    def SaveMapToFile(self):
+
+        file = open(C.SAVE_FOLDER+self.name+".txt", "w")
+
+        for x in range(len(self.Buttons)):
+            for y in range(len(self.Buttons[C.X])):
+
+                print(self.tiles.GetImagePathAtIndex(self.ImgIndexAtButton[x][y]),file=file, end="")
+                if y < len(self.Buttons[C.X]) - 1:
+                    print("|", file=file, end="")
+
+            if x < len(self.Buttons) - 1:
+                print("",file=file)
+
+        file.close()
+
