@@ -16,8 +16,6 @@ class Map:
         self.tiles:Tile = tiles
         self.name:str = name
 
-        print(images)
-
         self.dimension = button_width
         if button_height < self.dimension:
             self.dimension = button_height
@@ -40,7 +38,6 @@ class Map:
                     self.ImgIndexAtButton[i][j] = C.BLANK_IMAGE
                     Button.configure(image=self.tiles.GetScaledDownImageAtIndex(C.BLANK_IMAGE,self.dimension,self.dimension))
                 else:
-                    print("X:"+str(j)+"   Y:"+str(i))
                     self.ImgIndexAtButton[i][j] = self.tiles.GetImageIndexByName(images[i][j])
                     Button.configure(image=self.tiles.GetScaledDownImageByName(images[i][j],self.dimension,self.dimension))
 
