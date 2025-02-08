@@ -23,8 +23,7 @@ class Map:
         self.Buttons = [[0 for _ in range(int(y))] for _ in range(int(x))]
         self.ImgIndexAtButton = [[0 for _ in range(int(y))] for _ in range(int(x))]
 
-        #####################################
-        ## Make 40 the highest dimension a map can be due to lag reasons because customtkinter sucks 
+        
         for i in range(x):
             for j in range(y):
                 Button = ctk.CTkButton(master=self.Map, text="", image=img, fg_color="transparent", corner_radius=0, width=self.dimension, height=self.dimension, command=lambda X=i, Y=j: self.SetImageScaled(self.dimension,self.dimension,X,Y))

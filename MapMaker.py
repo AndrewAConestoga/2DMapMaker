@@ -166,11 +166,13 @@ Title_Frame = ctk.CTkFrame(master=window, width=WIDTH, height=HEIGHT, fg_color="
 Create_Frame = ctk.CTkFrame(master=window, width=WIDTH, height=HEIGHT, fg_color="transparent")
 
 ## Create the layout for the title screen frame
-Create_New_Map_Width = int(WIDTH*C.SCREEN_THIRD)
-Create_New_Map_Height = int(HEIGHT*C.SCREEN_EIGHTH)
-Title_Label = ctk.CTkLabel(master=Title_Frame, text="2D Map Maker", width=Create_New_Map_Width, height=Create_New_Map_Height, bg_color="transparent", font=('<Abel>', C.FONT_TITLE))
-Create_New_Map = ctk.CTkButton(master=Title_Frame, text="Create New Map", width=Create_New_Map_Width, height=Create_New_Map_Height, command=CreateScreen, font=('<Aerial>', C.FONT_LARGE))
-Edit_Map = ctk.CTkButton(master=Title_Frame, text="Edit Map", width=Create_New_Map_Width, height=Create_New_Map_Height, font=('<Aerial>', C.FONT_LARGE), command=EditScreen)
+Create_New_Map_Width = int(WIDTH*C.SCREEN_FIFTH)
+Create_New_Map_Height = int(HEIGHT*C.SCREEN_TENTH)
+Create_Map_Width = int(WIDTH*C.SCREEN_THIRD)
+Create_Map_Height = int(HEIGHT*C.SCREEN_EIGHTH)
+Title_Label = ctk.CTkLabel(master=Title_Frame, text="2D Map Maker", width=Create_Map_Width, height=Create_Map_Height, bg_color="transparent", font=('<Abel>', C.FONT_TITLE))
+Create_New_Map = ctk.CTkButton(master=Title_Frame, text="Create New Map", width=Create_Map_Width, height=Create_Map_Height, command=CreateScreen, font=('<Aerial>', C.FONT_LARGE))
+Edit_Map = ctk.CTkButton(master=Title_Frame, text="Edit Map", width=Create_Map_Width, height=Create_Map_Height, font=('<Aerial>', C.FONT_LARGE), command=EditScreen)
 
 ## Create the layout for the create new map screen frame
 Dimension_Button_Height = int(HEIGHT*C.SCREEN_DIMENSION_INPUT_HEIGHT)
@@ -179,13 +181,21 @@ Create_Map_Button = ctk.CTkButton(master=Create_Frame, width=Create_New_Map_Widt
 Name_TextBox = ctk.CTkTextbox(master=Create_Frame, width=Create_New_Map_Width, height=Create_New_Map_Height, font=('<Aerial>', C.FONT_SMALL), bg_color="white")
 Dimension_X_TextBox = ctk.CTkTextbox(master=Create_Frame, width=Dimension_Button_Width, height=Dimension_Button_Height, font=('<Aerial>', C.FONT_SMALL), bg_color="white")
 Dimension_Y_TextBox = ctk.CTkTextbox(master=Create_Frame, width=Dimension_Button_Width, height=Dimension_Button_Height, font=('<Aerial>', C.FONT_SMALL), bg_color="white")
+Dimension_X_Label = ctk.CTkLabel(master=Create_Frame, width=Dimension_Button_Width, height=Dimension_Button_Height, font=('<Aerial>', C.FONT_SMALL), text="X")
+Dimension_Y_Label = ctk.CTkLabel(master=Create_Frame, width=Dimension_Button_Width, height=Dimension_Button_Height, font=('<Aerial>', C.FONT_SMALL), text="Y")
+Name_Label = ctk.CTkLabel(master=Create_Frame, width=Create_New_Map_Width, height=Create_New_Map_Height, font=('<Aerial>', C.FONT_MEDIUM), text="Name")
 Dimension_Error_Message = ctk.CTkLabel(master=Create_Frame, width=Create_New_Map_Width, text="", height=Create_New_Map_Height, font=('<Aerial>', C.FONT_MEDIUM))
+Space = ctk.CTkLabel(master=Create_Frame, width=Create_New_Map_Width, text="", height=Create_New_Map_Height, font=('<Aerial>', C.FONT_MEDIUM))
 
-Create_Map_Button.grid(padx=C.PAD_PIXEL, row=0, column=0, columnspan=2)
-Name_TextBox.grid(padx=C.PAD_PIXEL, row=1, column=0, columnspan=2)
-Dimension_Y_TextBox.grid(padx=C.PAD_PIXEL, pady=C.PAD_HUGE, row=2, column=0)
-Dimension_X_TextBox.grid(padx=C.PAD_PIXEL, pady=C.PAD_HUGE, row=2, column=1)
-Dimension_Error_Message.grid(padx=C.PAD_PIXEL, pady=C.PAD_HUGE, row=3, column=0, columnspan=2)
+Create_Map_Button.grid(padx=C.PAD_PIXEL, pady=C.PAD_HUGE, row=0, column=0, columnspan=2)
+Name_Label.grid(padx=C.PAD_PIXEL, row=1, column=0, columnspan=2)
+Name_TextBox.grid(padx=C.PAD_PIXEL, pady=C.PAD_SMALL, row=2, column=0, columnspan=2)
+Space.grid(pady=C.PAD_LARGE, row=3, column=0, columnspan=2)
+Dimension_X_Label.grid(padx=C.PAD_PIXEL, row=4, column=0)
+Dimension_Y_Label.grid(padx=C.PAD_PIXEL, row=4, column=1)
+Dimension_Y_TextBox.grid(padx=C.PAD_PIXEL, pady=C.PAD_SMALL, row=5, column=0)
+Dimension_X_TextBox.grid(padx=C.PAD_PIXEL, pady=C.PAD_SMALL, row=5, column=1)
+Dimension_Error_Message.grid(padx=C.PAD_PIXEL, pady=C.PAD_HUGE, row=6, column=0, columnspan=2)
 
 ## Create the layout for the edit map screen frame 
 All_Maps_Scroll_Frame = ctk.CTkScrollableFrame(Edit_Frame,label_text="Maps", height=int(HEIGHT/1.2), width=int(WIDTH/2), label_font=('<Aerial>', C.FONT_MEDIUM))

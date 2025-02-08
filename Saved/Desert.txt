@@ -1,0 +1,12 @@
+Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Soil.png
+Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Soil.png
+Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Soil.png
+Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Sand.png
+Tiles/Soil.png|Tiles/Sand.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png
+Tiles/Soil.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png
+Tiles/Sand.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png
+Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png
+Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Sand.png
+Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Sand.png
+Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Soil.png|Tiles/Soil.png
+Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png|Tiles/Sand.png
